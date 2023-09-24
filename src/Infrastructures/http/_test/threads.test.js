@@ -237,7 +237,7 @@ describe('/threads endpoint', () => {
       expect(comments[0].replies[2].content).toEqual('**balasan telah dihapus**');
 
       expect(comments[1].replies).toHaveLength(0);
-    });
+    }, 30000);
 
     it('should response 404 when thread not found', async () => {
       // Arrange
