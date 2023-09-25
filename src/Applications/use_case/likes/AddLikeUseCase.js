@@ -9,11 +9,11 @@ class AddLikeUseCase {
     await this._threadRepository.verifyAvailableThread(threadId);
     await this._commentRepository.verifyAvailableComment(commentId);
     await this._commentRepository.verifyAvailableCommentInThread(commentId, threadId);
-    const like = await this._likeRepository.verifyLike(commentId, credentialId);
+    const like = await this._likeRepository.verifyLike(credentialId, commentId);
     if (like) {
-      await this._likeRepository.updateLike(commentId, credentialId);
+      await this._likeRepository.updateLike(credentialId, commentId);
     } else {
-      await this._likeRepository.addLike(commentId, credentialId);
+      await this._likeRepository.addLike(credentialId, commentId);
     }
   }
 }

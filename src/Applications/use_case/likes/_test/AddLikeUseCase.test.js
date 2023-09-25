@@ -42,9 +42,9 @@ describe('AddLikeUseCase', () => {
     expect(mockCommentRepository.verifyAvailableCommentInThread)
       .toBeCalledWith(commentId, threadId);
     expect(mockLikeRepository.verifyLike)
-      .toBeCalledWith(commentId, credentialId);
+      .toBeCalledWith(credentialId, commentId);
     expect(mockLikeRepository.addLike)
-      .toBeCalledWith(commentId, credentialId);
+      .toBeCalledWith(credentialId, commentId);
   });
 
   it('should orchestrating the update like action correctly', async () => {
@@ -85,8 +85,8 @@ describe('AddLikeUseCase', () => {
     expect(mockCommentRepository.verifyAvailableCommentInThread)
       .toBeCalledWith(commentId, threadId);
     expect(mockLikeRepository.verifyLike)
-      .toBeCalledWith(commentId, credentialId);
+      .toBeCalledWith(credentialId, commentId);
     expect(mockLikeRepository.updateLike)
-      .toBeCalledWith(commentId, credentialId);
+      .toBeCalledWith(credentialId, commentId);
   });
 });
