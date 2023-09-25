@@ -61,10 +61,12 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async getCommentsByThreadId(threadId) {
     const query = {
-      text: `SELECT comments.id, users.username, comments.date, comments.content, comments.is_deleted
+      text: `SELECT comments.id, users.username, comments.date, comments.content, comments.is_deleted, COUNT(comment_likes.comment_id) AS likecount
       FROM comments
       LEFT JOIN users ON users.id = comments.owner
+      LEFT JOIN comment_likes ON comment_likes.comment_id = comments.id AND comment_likes.is_deleted = false
       WHERE comments.thread_id = $1
+      GROUP BY comments.id, users.username, comments.date, comments.content, comments.is_deleted
       ORDER BY comments.date ASC`,
       values: [threadId],
     };

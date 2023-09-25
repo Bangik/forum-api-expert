@@ -2,6 +2,7 @@ const pool = require('../../database/postgres/pool');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
+const CommentLikesTableTestHelper = require('../../../../tests/CommentLikesTableTestHelper');
 const LoginTestHelper = require('../../../../tests/LoginTestHelper');
 
 const container = require('../../container');
@@ -130,7 +131,7 @@ describe('/threads endpoint', () => {
     it('should response 200 and return thread', async () => {
       // Arrange
       const server = await createServer(container);
-      const { userId } = await LoginTestHelper.login({ server });
+      const { accessToken, userId } = await LoginTestHelper.login({ server });
       const { userId: userId2 } = await LoginTestHelper.login({ server, namauser: 'dicoding2' });
 
       await ThreadsTableTestHelper.addThread({
@@ -184,6 +185,38 @@ describe('/threads endpoint', () => {
 
       await RepliesTableTestHelper.deleteReplyById('reply-789');
 
+      await CommentLikesTableTestHelper.addLike({
+        id: 'like-123',
+        owner: userId,
+        commentId: 'comment-123',
+      });
+
+      await CommentLikesTableTestHelper.addLike({
+        id: 'like-456',
+        owner: userId2,
+        commentId: 'comment-123',
+      });
+
+      await CommentLikesTableTestHelper.addLike({
+        id: 'like-789',
+        owner: userId,
+        commentId: 'comment-456',
+      });
+
+      await CommentLikesTableTestHelper.addLike({
+        id: 'like-012',
+        owner: userId2,
+        commentId: 'comment-456',
+      });
+
+      await server.inject({
+        method: 'PUT',
+        url: '/threads/thread-123/comments/comment-123/likes',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
       // Action
       const response = await server.inject({
         method: 'GET',
@@ -208,11 +241,13 @@ describe('/threads endpoint', () => {
       expect(comments[0].username).toEqual('dicoding');
       expect(comments[0].date).toBeDefined();
       expect(comments[0].content).toEqual('dicoding comment 123');
+      expect(comments[0].likeCount).toStrictEqual(1);
 
       expect(comments[1].id).toEqual('comment-456');
       expect(comments[1].username).toEqual('dicoding2');
       expect(comments[1].date).toBeDefined();
       expect(comments[1].content).toEqual('dicoding comment 456');
+      expect(comments[1].likeCount).toStrictEqual(2);
 
       expect(comments[2].id).toEqual('comment-789');
       expect(comments[2].username).toEqual('dicoding');

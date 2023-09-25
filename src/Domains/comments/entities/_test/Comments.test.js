@@ -19,6 +19,7 @@ describe('a Comments entities', () => {
       date: 'date',
       content: 'abc',
       is_deleted: 'false',
+      likecount: 10,
     };
 
     // Action and Assert
@@ -33,6 +34,7 @@ describe('a Comments entities', () => {
       date: new Date(),
       content: 'abc',
       is_deleted: false,
+      likecount: '10',
     };
 
     // Action
@@ -58,6 +60,7 @@ describe('a Comments entities', () => {
       date: new Date(),
       content: 'abc',
       is_deleted: true,
+      likecount: '10',
     };
 
     // Action
