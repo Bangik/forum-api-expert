@@ -9,6 +9,7 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const Comments = require('../../../Domains/comments/entities/Comments');
+const CommentLikesTableTestHelper = require('../../../../tests/CommentLikesTableTestHelper');
 
 describe('CommentRepositoryPostgres', () => {
   afterEach(async () => {
@@ -175,6 +176,7 @@ describe('CommentRepositoryPostgres', () => {
           date: new Date('2021-08-08T07:22:33.555Z'),
           content: 'dicoding',
           is_deleted: false,
+          likecount: '2',
         }),
         new Comments({
           id: commendId2,
@@ -182,6 +184,7 @@ describe('CommentRepositoryPostgres', () => {
           date: new Date('2021-09-08T07:22:33.555Z'),
           content: 'dicoding2',
           is_deleted: true,
+          likecount: '2',
         }),
       ];
 
@@ -204,6 +207,11 @@ describe('CommentRepositoryPostgres', () => {
         is_deleted: true,
         date: new Date('2021-09-08T07:22:33.555Z'),
       });
+
+      await CommentLikesTableTestHelper.addLike({ id: 'like-123', owner: userId, commentId });
+      await CommentLikesTableTestHelper.addLike({ id: 'like-456', owner: userId, commentId: commendId2 });
+      await CommentLikesTableTestHelper.addLike({ id: 'like-789', owner: userId2, commentId });
+      await CommentLikesTableTestHelper.addLike({ id: 'like-101', owner: userId2, commentId: commendId2 });
 
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
