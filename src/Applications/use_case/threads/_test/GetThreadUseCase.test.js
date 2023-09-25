@@ -26,6 +26,7 @@ describe('GetThreadUseCase', () => {
         date: new Date(),
         content: 'dicoding',
         is_deleted: false,
+        likecount: '2',
       }),
       new Comments({
         id: 'comment-124',
@@ -33,6 +34,7 @@ describe('GetThreadUseCase', () => {
         date: new Date(),
         content: 'dicoding2',
         is_deleted: false,
+        likecount: '1',
       }),
       new Comments({
         id: 'comment-125',
@@ -40,6 +42,7 @@ describe('GetThreadUseCase', () => {
         date: new Date(),
         content: 'dicoding3',
         is_deleted: true,
+        likecount: '0',
       }),
     ];
 
