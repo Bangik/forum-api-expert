@@ -11,6 +11,14 @@ const CommentLikesTableTestHelper = {
     const result = await pool.query(query);
     return result.rows;
   },
+  async addLike({ id, owner, commentId }) {
+    const query = {
+      text: 'INSERT INTO comment_likes VALUES($1, $2, $3)',
+      values: [id, commentId, owner],
+    };
+
+    await pool.query(query);
+  },
   async cleanTable() {
     await pool.query('DELETE FROM comment_likes WHERE 1=1');
   },
